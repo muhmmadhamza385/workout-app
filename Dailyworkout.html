@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Home Workout Tracker</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  font-family: Arial, sans-serif;
+  background:#0f172a;
+  color:#fff;
+  padding:15px;
+}
+h1,h2,h3{text-align:center}
+.section{margin-top:25px}
+.exercise{
+  background:#1e293b;
+  padding:12px;
+  margin:10px 0;
+  border-radius:10px;
+}
+.exercise.done{background:#14532d}
+.exercise.skip{background:#7f1d1d}
+.buttons{
+  margin-top:8px;
+  display:flex;
+  gap:10px;
+}
+button{
+  flex:1;
+  padding:8px;
+  border:none;
+  border-radius:6px;
+  font-size:14px;
+  cursor:pointer;
+}
+.doneBtn{background:#22c55e;color:#000}
+.skipBtn{background:#ef4444;color:#fff}
+.completeBox{
+  background:#0f766e;
+  padding:12px;
+  margin-top:15px;
+  border-radius:10px;
+  text-align:center;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🏠 Home Workout Tracker</h1>
+<h2 id="dayTitle"></h2>
+
+<div class="section">
+<h3>🔥 Main Workout</h3>
+<div id="workout"></div>
+</div>
+
+<div class="section">
+<h3>📏 Height & Posture</h3>
+<div id="posture"></div>
+</div>
+
+<div class="section">
+<h3>💪 Forearms</h3>
+<div id="forearms"></div>
+</div>
+
+<script>
+// 🔹 START DAY (DAY 4)
+let currentDay = localStorage.getItem("currentDay");
+if(!currentDay){
+  currentDay = 4;
+  localStorage.setItem("currentDay",4);
+}else{
+  currentDay = parseInt(currentDay);
+}
+
+const dayNames = {
+1:"DAY 1 — SHOULDERS + TRICEPS",
+2:"DAY 2 — BICEPS + BACK",
+3:"DAY 3 — ABS + CORE",
+4:"DAY 4 — SHOULDERS + BICEPS",
+5:"DAY 5 — TRICEPS + ABS",
+6:"DAY 6 — LIGHT CHEST + LEGS"
+};
+
+document.getElementById("dayTitle").innerText = dayNames[currentDay];
+
+const workouts = {
+1:[
+"Pike Push-ups – 4×8–12",
+"Wall Handstand Hold – 3×20–40 sec",
+"Lateral Raises – 3×15",
+"Chair Dips – 4×12–15",
+"Close Grip Push-ups – 3×10–12"
+],
+2:[
+"Towel Curls – 4×12",
+"Isometric Biceps Hold – 3×30 sec",
+"Slow Biceps Squeeze – 2×max",
+"Pull-ups / Door Rows – 4×max"
+],
+3:[
+"Leg Raises – 4×12",
+"Plank – 3×45–60 sec",
+"Russian Twists – 3×20",
+"Mountain Climbers – 3×30 sec"
+],
+4:[
+"Arm Circles – 2×30 sec",
+"Pike Push-ups – 3×10",
+"Bottle Front Raises – 3×12",
+"Towel Curls – 3×12",
+"Isometric Hold – 2×40 sec"
+],
+5:[
+"Chair Dips – 4×12",
+"Diamond Push-ups – 3×8–12",
+"Plank Hold – 3×60 sec",
+"Bicycle Crunches – 3×20"
+],
+6:[
+"Push-ups – 2×15",
+"Squats – 2×15",
+"Calf Raises – 2×20"
+]
+};
+
+let completedCount = 0;
+
+function render(list,id){
+  const box=document.getElementById(id);
+  box.innerHTML="";
+  completedCount = 0;
+
+  list.forEach(text=>{
+    let div=document.createElement("div");
+    div.className="exercise";
+    div.innerHTML=`
+      <strong>${text}</strong>
+      <div class="buttons">
+        <button class="doneBtn">✔ Done</button>
+        <button class="skipBtn">✖ Skip</button>
+      </div>
+    `;
+    div.querySelector(".doneBtn").onclick=()=>mark(div);
+    div.querySelector(".skipBtn").onclick=()=>mark(div);
+    box.appendChild(div);
+  });
+}
+
+function mark(el){
+  if(el.classList.contains("done") || el.classList.contains("skip")) return;
+  el.classList.add("done");
+  completedCount++;
+
+  if(completedCount === workouts[currentDay].length){
+    nextDay();
+  }
+}
+
+function nextDay(){
+  currentDay++;
+  if(currentDay>6) currentDay=1;
+  localStorage.setItem("currentDay",currentDay);
+  location.reload();
+}
+
+// MAIN WORKOUT
+render(workouts[currentDay],"workout");
+
+// POSTURE
+render([
+"Hanging – 2×30 sec",
+"Cobra Stretch – 1 min",
+"Chest Open Stretch – 1 min",
+"Wall Posture Drill – 1 min"
+],"posture");
+
+// FOREARMS
+render([
+"Towel Wring – 3 rounds",
+"Fist Push-ups – 3×10–15",
+"Wrist Curls – 3×20",
+"Reverse Wrist Curls – 3×15",
+"Static Grip Hold – 3 rounds",
+"Palm Squeeze – 20–30 reps"
+],"forearms");
+</script>
+
+</body>
+</html>
