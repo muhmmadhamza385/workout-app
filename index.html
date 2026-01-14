@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Home Workout Tracker</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#0f172a;
+    color:#fff;
+    margin:0;
+    padding:15px;
+}
+h1,h2{
+    text-align:center;
+}
+.exercise{
+    background:#1e293b;
+    padding:15px;
+    margin:10px 0;
+    border-radius:10px;
+    display:none;
+}
+.exercise.active{
+    display:block;
+}
+.buttons{
+    margin-top:10px;
+    display:flex;
+    gap:10px;
+}
+button{
+    flex:1;
+    padding:10px;
+    border:none;
+    border-radius:8px;
+    font-size:16px;
+    cursor:pointer;
+}
+.done{background:#22c55e;color:#000;}
+.skip{background:#ef4444;color:#fff;}
+.section{
+    margin-top:30px;
+}
+.footer{
+    text-align:center;
+    margin-top:30px;
+    font-size:14px;
+    opacity:0.6;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🏠 Home Workout Tracker</h1>
+<h2 id="dayTitle"></h2>
+
+<div id="workout"></div>
+
+<div class="section">
+<h2>📏 Daily Height & Posture</h2>
+<div id="posture"></div>
+</div>
+
+<div class="section">
+<h2>💪 Daily Forearms</h2>
+<div id="forearms"></div>
+</div>
+
+<div class="footer">Offline Workout App</div>
+
+<script>
+const today = new Date().getDay();
+
+const days = [
+  "REST DAY",
+  "DAY 1 — SHOULDERS + TRICEPS",
+  "DAY 2 — BICEPS + BACK",
+  "DAY 3 — ABS + CORE",
+  "DAY 4 — SHOULDERS + BICEPS",
+  "DAY 5 — TRICEPS + ABS",
+  "DAY 6 — LIGHT CHEST + LEGS"
+];
+
+document.getElementById("dayTitle").innerText = days[today];
+
+const plans = {
+1:[
+"Pike Push-ups – 4×8–12",
+"Wall Handstand Hold – 3×20–40 sec",
+"Lateral Raises – 3×15",
+"Chair Dips – 4×12–15",
+"Close Grip Push-ups – 3×10–12"
+],
+2:[
+"Towel Curls – 4×12",
+"Isometric Biceps Hold – 3×30 sec",
+"Slow Biceps Squeeze – 2×max",
+"Pull-ups / Door Rows – 4×max"
+],
+3:[
+"Leg Raises – 4×12",
+"Plank – 3×45–60 sec",
+"Russian Twists – 3×20",
+"Mountain Climbers – 3×30 sec"
+],
+4:[
+"Arm Circles – 2×30 sec",
+"Pike Push-ups – 3×10",
+"Bottle Front Raises – 3×12",
+"Towel Curls – 3×12",
+"Isometric Hold – 2×40 sec"
+],
+5:[
+"Chair Dips – 4×12",
+"Diamond Push-ups – 3×8–12",
+"Plank Hold – 3×60 sec",
+"Bicycle Crunches – 3×20"
+],
+6:[
+"Push-ups – 2×15",
+"Squats – 2×15",
+"Calf Raises – 2×20"
+]
+};
+
+function render(list,id){
+ let box=document.getElementById(id);
+ list.forEach((e,i)=>{
+   box.innerHTML+=`
+   <div class="exercise ${i==0?'active':''}">
+   <strong>${e}</strong>
+   <div class="buttons">
+   <button class="done" onclick="next(this)">✔ Done</button>
+   <button class="skip" onclick="next(this)">✖ Skip</button>
+   </div></div>`;
+ });
+}
+
+function next(btn){
+ let cur=btn.closest('.exercise');
+ cur.classList.remove('active');
+ if(cur.nextElementSibling){
+   cur.nextElementSibling.classList.add('active');
+ }
+}
+
+if(today!==0){
+ render(plans[today],"workout");
+}else{
+ document.getElementById("workout").innerHTML="<p style='text-align:center'>😴 REST DAY</p>";
+}
+
+render([
+"Hanging – 2×30 sec",
+"Cobra Stretch – 1 min",
+"Chest Open Stretch – 1 min",
+"Wall Posture Drill – 1 min"
+],"posture");
+
+render([
+"Towel Wring – 3 rounds",
+"Fist Push-ups – 3×10–15",
+"Wrist Curls – 3×20",
+"Reverse Wrist Curls – 3×15",
+"Static Grip Hold – 3 rounds",
+"Palm Squeeze – 20–30 reps"
+],"forearms");
+</script>
+
+</body>
+  </html>
